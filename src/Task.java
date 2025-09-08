@@ -1,5 +1,16 @@
 public class Task {
 
+    private final int id;
+    private String title;
+    private String description;
+    private Status status;
+
+    public Task(int id, String title, String description, Status status) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
     public Status getStatus() {
         return status;
     }
@@ -16,11 +27,6 @@ public class Task {
         return description;
     }
 
-    private int id;
-    private String title;
-    private String description;
-    private Status status;
-
     public void setTitle(String title) {
         this.title = title;
     }
@@ -33,15 +39,76 @@ public class Task {
         this.status = status;
     }
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+        @Override
+        public int hashCode() {
+            int result = Integer.hashCode(id);
 
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
+            if (title != null) {
+                result = 31 * result + title.hashCode();
+            } else {
+                result = 31 * result;
+            }
+
+            if (description != null) {
+                result = 31 * result + description.hashCode();
+            } else {
+                result = 31 * result;
+            }
+
+            if (status != null) {
+                result = 31 * result + status.hashCode();
+            } else {
+                result = 31 * result;
+            }
+
+            return result;
+        }
+            @Override
+            public boolean equals(Object obj) {
+                if (this == obj) {
+                    return true;
+                }
+                if (obj == null) {
+                    return false;
+                }
+                if (getClass() != obj.getClass()) {
+                    return false;
+                }
+                Task other = (Task) obj;
+
+                if (id != other.id) {
+                    return false;
+                }
+                if (title == null) {
+                    if (other.title != null) {
+                        return false;
+                    }
+                } else {
+                    if (!title.equals(other.title)) {
+                        return false;
+                    }
+                }
+                if (description == null) {
+                    if (other.description != null) {
+                        return false;
+                    }
+                } else {
+                    if (!description.equals(other.description)) {
+                        return false;
+                    }
+                }
+                if (status == null) {
+                    if (other.status != null) {
+                        return false;
+                    }
+                } else {
+                    if (!status.equals(other.status)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
 
     @Override
     public String toString() {
@@ -52,11 +119,5 @@ public class Task {
                 ", status=" + status +
                 '}';
     }
-
-    public Task(int id, String title, String description, Status status) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
     }
-}
+

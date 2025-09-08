@@ -6,25 +6,22 @@ public class Main {
         Task task1 = new Task(0, "Купить продукты", "Список продуктов для семьи", Status.NEW);
         Task task2 = new Task(0, "Заплатить счета", "Оплатить коммунальные услуги", Status.IN_PROGRESS);
 
-        task1 = manager.createTask(task1);
-        task2 = manager.createTask(task2);
+        task1 = manager.createTask("Купить продукты", "Список продуктов для семьи", Status.NEW);
+        task2 = manager.createTask("Заплатить счета", "Оплатить коммунальные услуги", Status.IN_PROGRESS);
 
         // Создаем эпик с двумя подзадачами
-        Epic epic1 = new Epic(0, "Организация праздника", "Подготовка к семейному празднику", Status.NEW);
-        epic1 = (Epic) manager.createEpic(epic1);
+        Epic epic1 = manager.createEpic("Организация праздника", "Подготовка к семейному празднику", Status.NEW);
 
-        Subtask subtask1 = new Subtask(0, "Заказать кейтеринг", "Выбрать меню и заказать", Status.NEW, epic1.getId());
-        Subtask subtask2 = new Subtask(0, "Пригласить гостей", "Составить список и отправить приглашения", Status.NEW, epic1.getId());
 
-        subtask1 = manager.createSubtask(subtask1);
-        subtask2 = manager.createSubtask(subtask2);
+        Subtask subtask1 = manager.createSubtask("Заказать кейтеринг", "Выбрать меню и заказать", Status.NEW, epic1.getId());
+
+        Subtask subtask2 = manager.createSubtask("Пригласить гостей", "Составить список и отправить приглашения", Status.NEW, epic1.getId());
 
         // Создаем эпик с одной подзадачей
-        Epic epic2 = new Epic(0, "Покупка квартиры", "План покупка недвижимости", Status.NEW);
-        epic2 = (Epic) manager.createEpic(epic2);
+        Epic epic2 = manager.createEpic("Покупка квартиры", "План покупка недвижимости", Status.NEW);
 
-        Subtask subtask3 = new Subtask(0, "Выбрать район", "Изучить районы для покупки", Status.NEW, epic2.getId());
-        subtask3 = manager.createSubtask(subtask3);
+        Subtask subtask3 = manager.createSubtask("Выбрать район", "Изучить районы для покупки", Status.NEW, epic2.getId());
+
 
         // Выводим списки всех задач
         System.out.println("Все задачи:");

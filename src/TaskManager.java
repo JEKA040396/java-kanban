@@ -6,28 +6,27 @@ public class TaskManager {
 
     private int nextId = 1;
 
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private final HashMap<Integer, Task> tasks = new HashMap<>();
+    private final HashMap<Integer, Epic> epics = new HashMap<>();
+    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
     // Создание задачи - присваивается уникальный ID
-    public Task createTask(Task task) {
-        task = assignId(task);
+    public Task createTask(String title, String description, Status status) {
+        Task task = new Task(nextId++, title, description, status);
         tasks.put(task.getId(), task);
         return task;
     }
 
-    public Epic createEpic(Epic epic) {
-        epic = (Epic) assignId(epic);
+    public Epic createEpic(String title, String description, Status status) {
+        Epic epic = new Epic(nextId++, title, description, status);
         epics.put(epic.getId(), epic);
         return epic;
     }
 
-    public Subtask createSubtask(Subtask subtask) {
-        subtask = (Subtask) assignId(subtask);
+    public Subtask createSubtask(String title, String description, Status status, int epicId) {
+        Subtask subtask = new Subtask(nextId++, title, description, status, epicId);
         subtasks.put(subtask.getId(), subtask);
-        // Добавляем подзадачу в эпик
-        Epic epic = epics.get(subtask.getEpicId());
+        Epic epic = epics.get(epicId);
         if (epic != null) {
             epic.addSubtask(subtask);
             epic.updateStatus();
