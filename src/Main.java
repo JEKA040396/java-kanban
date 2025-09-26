@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        TaskManager manager = new TaskManager();
+        TaskManager manager = new InMemoryTaskManager();
 
         // Создаем две обычные задачи
         Task task1 = new Task(0, "Купить продукты", "Список продуктов для семьи", Status.NEW);
