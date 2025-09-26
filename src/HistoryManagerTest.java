@@ -1,0 +1,49 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
+class HistoryManagerTest {
+
+    private HistoryManager historyManager;
+
+    @BeforeEach
+    public void setUp() {
+        historyManager = new InMemoryHistoryManager();
+    }
+
+    @Test
+    void add() {
+        Task task = new Task(1, "Title", "Description", Status.NEW);
+        historyManager.add(task);
+        List<Task> history = historyManager.getHistory();
+        assertEquals(1, history.size());
+        assertEquals(task, history.get(0));
+    }
+
+
+    @Test
+    void shouldLimitHistorySize() {
+        for (int i = 1; i <= 11; i++) {
+            Task task = new Task(i, "Task " + i, "Desc", Status.NEW);
+            historyManager.add(task);
+        }
+        List<Task> history = historyManager.getHistory();
+        assertEquals(10, history.size());
+        assertFalse(history.stream().anyMatch(t -> t.getId() == 1));
+    }
+
+    @Test
+    void remove() {
+        Task task1 = new Task(1, "Title1", "Desc1", Status.NEW);
+        Task task2 = new Task(2, "Title2", "Desc2", Status.NEW);
+        historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.remove(1);
+        List<Task> history = historyManager.getHistory();
+        assertEquals(1, history.size());
+        assertEquals(task2, history.get(0));
+    }
+}
