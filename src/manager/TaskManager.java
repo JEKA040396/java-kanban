@@ -1,5 +1,10 @@
-import java.util.ArrayList;
-import java.util.HashMap;
+package manager;
+
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
+
 import java.util.List;
 
 public interface TaskManager {

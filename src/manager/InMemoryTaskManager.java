@@ -1,3 +1,10 @@
+package manager;
+
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -188,7 +195,7 @@ public class InMemoryTaskManager implements TaskManager {
         return task;
     }
 
-    // Копируем объект с новым ID, для простоты сделаем в базовом классе Task метод clone с новым ID,
+    // Копируем объект с новым ID, для простоты сделаем в базовом классе model.Task метод clone с новым ID,
     // либо мы можем сделать конструктор, но для примера простой вариант:
     private Task copyTaskWithId(Task task, int id) {
         if (task instanceof Subtask st) {
