@@ -4,10 +4,13 @@ import model.Epic;
 import model.Status;
 import model.Subtask;
 import model.Task;
+import manager.Managers;
+
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager manager = new InMemoryTaskManager();
+
+        TaskManager manager = Managers.getDefault();
 
         // Создаем две обычные задачи
         Task task1 = new Task(0, "Купить продукты", "Список продуктов для семьи", Status.NEW);

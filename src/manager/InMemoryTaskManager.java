@@ -16,55 +16,32 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private int nextId = 1;
 
-    // Получить задачу по ID
+    @Override
     public Task getTaskById(int id) {
-        Task task = null;
-        if (tasks.containsKey(id)) {
-            task = tasks.get(id);
-        } else if (epics.containsKey(id)) {
-            task = epics.get(id);
-        } else if (subtasks.containsKey(id)) {
-            task = subtasks.get(id);
-        }
-
+        Task task = tasks.get(id);
         if (task != null) {
             historyManager.add(task);
         }
         return task;
     }
 
-    public Task getEpicById(int id) {
-        Task task = null;
-        if (tasks.containsKey(id)) {
-            task = tasks.get(id);
-        } else if (epics.containsKey(id)) {
-            task = epics.get(id);
-        } else if (subtasks.containsKey(id)) {
-            task = subtasks.get(id);
+    @Override
+    public Epic getEpicById(int id) {
+        Epic epic = epics.get(id);
+        if (epic != null) {
+            historyManager.add(epic);
         }
-
-        if (task != null) {
-            historyManager.add(task);
-        }
-        return task;
+        return epic;
     }
 
-    public Task getSubtaskById(int id) {
-        Task task = null;
-        if (tasks.containsKey(id)) {
-            task = tasks.get(id);
-        } else if (epics.containsKey(id)) {
-            task = epics.get(id);
-        } else if (subtasks.containsKey(id)) {
-            task = subtasks.get(id);
+    @Override
+    public Subtask getSubtaskById(int id) {
+        Subtask subtask = subtasks.get(id);
+        if (subtask != null) {
+            historyManager.add(subtask);
         }
-
-        if (task != null) {
-            historyManager.add(task);
-        }
-        return task;
+        return subtask;
     }
-
 
     // Удалить все задачи
     public void removeAllTasks() {
@@ -148,7 +125,6 @@ public class InMemoryTaskManager implements TaskManager {
             if (epic != null) {
                 epic.getSubtasks().remove(st);
                 epic.updateStatus();
-                historyManager.remove(id);
             }
         }
     }

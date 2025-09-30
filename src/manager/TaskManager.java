@@ -15,6 +15,12 @@ public interface TaskManager {
 
     Subtask createSubtask(String title, String description, Status status, int epicId);
 
+    // Новые методы для получения по id
+    Task getTaskById(int id);
+
+    Epic getEpicById(int id);
+
+    Subtask getSubtaskById(int id);
 
     // Получить задачи всех типов
     List<Task> getAllTasks();
