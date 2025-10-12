@@ -65,7 +65,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         linkLast(task);
 
         // Если размер истории превысил лимит
-        if (nodeMap.size() > MAX_HISTORY_SIZE) {
+        if (nodeMap.size() > maxHistorySize) {
             // Удаляем самую старую задачу (голову списка)
             removeNode(head);
         }
