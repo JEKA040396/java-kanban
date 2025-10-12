@@ -8,7 +8,7 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final int MAX_HISTORY_SIZE = 10;
+    private final int maxHistorySize = 10;
     private final HashMap<Integer, Node> nodeMap = new HashMap<>();
     private Node head;
     private Node tail;
