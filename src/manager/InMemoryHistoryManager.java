@@ -8,7 +8,6 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final int maxHistorySize = 10;
     private final HashMap<Integer, Node> nodeMap = new HashMap<>();
     private Node head;
     private Node tail;
@@ -55,20 +54,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (task == null) {
             return;
         }
-
-        // Если задача уже есть в истории, удаляем её узел
-        if (nodeMap.containsKey(task.getId())) {
-            removeNode(nodeMap.get(task.getId()));
-        }
-
         // Добавляем задачу в конец списка
         linkLast(task);
-
-        // Если размер истории превысил лимит
-        if (nodeMap.size() > maxHistorySize) {
-            // Удаляем самую старую задачу (голову списка)
-            removeNode(head);
-        }
     }
 
     @Override
