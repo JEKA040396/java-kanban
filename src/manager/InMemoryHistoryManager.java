@@ -54,11 +54,12 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (task == null) {
             return;
         }
-        // Если задача уже есть, удаляем её сначала
+        // При добавлении удаляем дубликат (если есть)
         remove(task.getId());
         // Добавляем задачу в конец списка
         linkLast(task);
     }
+
 
     @Override
     public void remove(int id) {

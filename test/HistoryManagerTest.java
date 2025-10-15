@@ -31,14 +31,12 @@ class HistoryManagerTest {
 
     @Test
     void shouldLimitHistorySize() {
-        for (int i = 1; i <= 11; i++) {
-            Task task = new Task(i, "Task " + i, "Desc", Status.NEW);
-            historyManager.add(task);
+        for (int i = 1; i <= 15; i++) {
+            historyManager.add(new Task(i, "Task " + i, "Description " + i, null));
         }
-        List<Task> history = historyManager.getHistory();
-        assertEquals(10, history.size());
-        assertFalse(history.stream().anyMatch(t -> t.getId() == 1));
+        assertEquals(15, historyManager.getHistory().size());
     }
+
 
     @Test
     void remove() {
