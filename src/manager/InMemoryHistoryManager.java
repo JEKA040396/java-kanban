@@ -54,6 +54,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (task == null) {
             return;
         }
+        // Если задача уже есть, удаляем её сначала
+        remove(task.getId());
         // Добавляем задачу в конец списка
         linkLast(task);
     }
