@@ -35,6 +35,12 @@ public interface TaskManager {
     // Обновление задачи по ID (полностью заменить)
     void updateTask(Task task);
 
+    void removeAllSubtasks();
+
+    void removeAllEpics();
+
+    void removeAllTasks();
+
     // Получение подзадач эпика
     List<Subtask> getSubtasksOfEpic(int epicId);
 

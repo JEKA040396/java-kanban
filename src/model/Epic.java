@@ -7,10 +7,24 @@ import java.util.Objects;
 public class Epic extends Task {
 
     private final List<Subtask> subtasks;
+    private final List<Integer> subtaskIds;
 
     public Epic(int id, String title, String description, Status status) {
         super(id, title, description, status);
         this.subtasks = new ArrayList<>();
+        this.subtaskIds = new ArrayList<>();
+    }
+
+    public List<Integer> getSubtaskIds() {
+        return subtaskIds;
+    }
+
+    public void addSubtaskId(int id) {
+        subtaskIds.add(id);
+    }
+
+    public void removeSubtaskId(Integer id) {
+        subtaskIds.remove(id);
     }
 
     public List<Subtask> getSubtasks() {
@@ -19,6 +33,12 @@ public class Epic extends Task {
 
     public void addSubtask(Subtask subtask) {
         subtasks.add(subtask);
+        addSubtaskId(subtask.getId());
+    }
+
+    public void removeSubtask(Subtask subtask) {
+        subtasks.remove(subtask);
+        removeSubtaskId(subtask.getId());
     }
 
     // Метод для обновления статуса эпика в зависимости от статусов подзадач
@@ -62,13 +82,15 @@ public class Epic extends Task {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Epic epic = (Epic) o;
-        return Objects.equals(subtasks, epic.subtasks);
+        return Objects.equals(subtasks, epic.subtasks) &&
+                Objects.equals(subtaskIds, epic.subtaskIds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(subtasks);
+        return Objects.hash(subtasks, subtaskIds);
     }
 }
