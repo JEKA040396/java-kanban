@@ -19,32 +19,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    public void save() {
-        try (FileWriter writer = new FileWriter(file)) {
-            writer.write("id,type,name,status,description,epic\n");
-
-            // Сохраняем все задачи
-            for (Task task : getAllTasks()) {
-                writer.write(toString(task) + "\n");
-            }
-
-            // Сохраняем все эпики
-            for (Epic epic : getAllEpics()) {
-                writer.write(toString(epic) + "\n");
-            }
-
-            // Сохраняем все подзадачи
-            for (Subtask subtask : getAllSubtasks()) {
-                writer.write(toString(subtask) + "\n");
-            }
-
-            // Можно расширить сохранение истории (например, через отдельную строку)
-
-        } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка при сохранении в файл", e);
-        }
-    }
-
     private static String toString(Task task) {
         String type;
         String epicId = "";
@@ -117,6 +91,32 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Ошибка при загрузке из файла", e);
         }
         return manager;
+    }
+
+    public void save() {
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write("id,type,name,status,description,epic\n");
+
+            // Сохраняем все задачи
+            for (Task task : getAllTasks()) {
+                writer.write(toString(task) + "\n");
+            }
+
+            // Сохраняем все эпики
+            for (Epic epic : getAllEpics()) {
+                writer.write(toString(epic) + "\n");
+            }
+
+            // Сохраняем все подзадачи
+            for (Subtask subtask : getAllSubtasks()) {
+                writer.write(toString(subtask) + "\n");
+            }
+
+            // Можно расширить сохранение истории (например, через отдельную строку)
+
+        } catch (IOException e) {
+            throw new ManagerSaveException("Ошибка при сохранении в файл", e);
+        }
     }
 
     // Переопределяем методы модификации, чтобы сохранить файл после каждой операции
