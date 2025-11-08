@@ -9,9 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTaskManagerTest {
 
@@ -26,7 +27,9 @@ public class FileBackedTaskManagerTest {
 
     @AfterEach
     public void tearDown() {
-        tempFile.delete();  // Удаляем временный файл после теста
+        if (tempFile.exists()) {
+            tempFile.delete();
+        }
     }
 
     @Test
@@ -44,6 +47,7 @@ public class FileBackedTaskManagerTest {
 
     @Test
     public void testSaveAndLoadWithTasks() {
+        // Используем старые методы без временных параметров для обратной совместимости
         Task task = manager.createTask("Task1", "Description1", Status.NEW);
         Epic epic = manager.createEpic("Epic1", "Epic desc", Status.NEW);
         Subtask subtask = manager.createSubtask("Subtask1", "Subtask desc", Status.NEW, epic.getId());
@@ -60,6 +64,32 @@ public class FileBackedTaskManagerTest {
         assertEquals(task.getTitle(), loaded.getAllTasks().get(0).getTitle());
         assertEquals(epic.getTitle(), loaded.getAllEpics().get(0).getTitle());
         assertEquals(subtask.getTitle(), loaded.getAllSubtasks().get(0).getTitle());
+    }
+
+    @Test
+    public void testSaveAndLoadWithTimeFields() {
+        // Используем новые методы с временными параметрами, но без пересечений
+        LocalDateTime startTime1 = LocalDateTime.of(2025, 1, 1, 10, 0);
+        LocalDateTime startTime2 = LocalDateTime.of(2025, 1, 1, 13, 0); // Разные времена чтобы избежать пересечений
+        Duration duration = Duration.ofHours(2);
+
+        Task task = manager.createTask("Task1", "Description1", Status.NEW, duration, startTime1);
+        Epic epic = manager.createEpic("Epic1", "Epic desc", Status.NEW);
+        Subtask subtask = manager.createSubtask("Subtask1", "Subtask desc", Status.NEW,
+                epic.getId(), Duration.ofHours(1), startTime2);
+
+        manager.save();
+
+        FileBackedTaskManager loaded = FileBackedTaskManager.loadFromFile(tempFile);
+
+        assertEquals(1, loaded.getAllTasks().size());
+        Task loadedTask = loaded.getAllTasks().get(0);
+        assertEquals(startTime1, loadedTask.getStartTime());
+        assertEquals(duration, loadedTask.getDuration());
+
+        assertEquals(1, loaded.getAllSubtasks().size());
+        Subtask loadedSubtask = loaded.getAllSubtasks().get(0);
+        assertEquals(startTime2, loadedSubtask.getStartTime());
     }
 
     @Test

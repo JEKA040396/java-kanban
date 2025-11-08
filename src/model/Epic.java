@@ -1,5 +1,7 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,11 +10,58 @@ public class Epic extends Task {
 
     private final List<Subtask> subtasks;
     private final List<Integer> subtaskIds;
+    Duration duration;
+    LocalDateTime startTime;
+    LocalDateTime endTime;
 
     public Epic(int id, String title, String description, Status status) {
         super(id, title, description, status);
         this.subtasks = new ArrayList<>();
         this.subtaskIds = new ArrayList<>();
+    }
+
+    @Override
+    public Duration getDuration() {
+        return duration;
+    }
+
+    @Override
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void updateTimeFields() {
+        if (subtasks.isEmpty()) {
+            duration = Duration.ZERO;
+            startTime = null;
+            endTime = null;
+            return;
+        }
+
+        duration = Duration.ZERO;
+        startTime = subtasks.stream()
+                .map(Subtask::getStartTime)
+                .filter(Objects::nonNull)
+                .min(LocalDateTime::compareTo)
+                .orElse(null);
+
+        endTime = subtasks.stream()
+                .map(subtask -> subtask.getEndTime())
+                .filter(Objects::nonNull)
+                .max(LocalDateTime::compareTo)
+                .orElse(null);
+
+        for (Subtask subtask : subtasks) {
+            Duration subDuration = subtask.getDuration();
+            if (subDuration != null) {
+                duration = duration.plus(subDuration);
+            }
+        }
     }
 
     public List<Integer> getSubtaskIds() {
