@@ -15,10 +15,12 @@ public interface TaskManager {
 
     // Старые методы (оставляем для обратной совместимости)
     Task createTask(String title, String description, Status status);
+
     Subtask createSubtask(String title, String description, Status status, int epicId);
 
     // Новые методы с временными параметрами
     Task createTask(String title, String description, Status status, Duration duration, LocalDateTime startTime);
+
     Subtask createSubtask(String title, String description, Status status, int epicId,
                           Duration duration, LocalDateTime startTime);
 
@@ -26,12 +28,16 @@ public interface TaskManager {
 
     // Методы для получения по id
     Task getTaskById(int id);
+
     Epic getEpicById(int id);
+
     Subtask getSubtaskById(int id);
 
     // Получить задачи всех типов
     List<Task> getAllTasks();
+
     List<Epic> getAllEpics();
+
     List<Subtask> getAllSubtasks();
 
     // Удалить задачу по ID
@@ -41,7 +47,9 @@ public interface TaskManager {
     void updateTask(Task task);
 
     void removeAllSubtasks();
+
     void removeAllEpics();
+    
     void removeAllTasks();
 
     // Получение подзадач эпика
