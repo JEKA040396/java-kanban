@@ -17,8 +17,8 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    private final File file;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    private final File file;
 
     public FileBackedTaskManager(File file) {
         this.file = file;

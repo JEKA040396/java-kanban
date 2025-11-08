@@ -49,7 +49,7 @@ public interface TaskManager {
     void removeAllSubtasks();
 
     void removeAllEpics();
-    
+
     void removeAllTasks();
 
     // Получение подзадач эпика
