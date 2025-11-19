@@ -5,17 +5,28 @@ import model.Status;
 import model.Subtask;
 import model.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TaskManager {
 
-    Task createTask(String title, String description, Status status);
+    List<Task> getPrioritizedTasks();
 
-    Epic createEpic(String title, String description, Status status);
+    // Старые методы (оставляем для обратной совместимости)
+    Task createTask(String title, String description, Status status);
 
     Subtask createSubtask(String title, String description, Status status, int epicId);
 
-    // Новые методы для получения по id
+    // Новые методы с временными параметрами
+    Task createTask(String title, String description, Status status, Duration duration, LocalDateTime startTime);
+
+    Subtask createSubtask(String title, String description, Status status, int epicId,
+                          Duration duration, LocalDateTime startTime);
+
+    Epic createEpic(String title, String description, Status status);
+
+    // Методы для получения по id
     Task getTaskById(int id);
 
     Epic getEpicById(int id);
@@ -45,5 +56,4 @@ public interface TaskManager {
     List<Subtask> getSubtasksOfEpic(int epicId);
 
     List<Task> getHistory();
-
 }
