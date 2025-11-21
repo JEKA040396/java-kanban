@@ -9,10 +9,11 @@ import manager.TaskManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.time.Duration;
 
 public class HttpTaskServer {
     private static final Gson GSON = new GsonBuilder()
-            .disableHtmlEscaping()
+            .registerTypeAdapter(Duration.class, new DurationTypeAdapter())
             .create();
     private final HttpServer server;
     private final TaskManager manager;
