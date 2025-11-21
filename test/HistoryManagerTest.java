@@ -31,7 +31,7 @@ class HistoryManagerTest {
     @Test
     void shouldLimitHistorySize() {
         for (int i = 1; i <= 15; i++) {
-            historyManager.add(new Task(i, "Task " + i, "Description " + i, null));
+            historyManager.add(new Task(i, "Task " + i, "Description " + i, Status.NEW));
         }
         assertEquals(15, historyManager.getHistory().size());
     }

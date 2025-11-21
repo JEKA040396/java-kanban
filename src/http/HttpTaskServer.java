@@ -1,6 +1,7 @@
 package http;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
 import http.handler.*;
 import manager.Managers;
@@ -10,7 +11,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class HttpTaskServer {
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = new GsonBuilder()
+            .disableHtmlEscaping()
+            .create();
     private final HttpServer server;
     private final TaskManager manager;
 
