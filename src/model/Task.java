@@ -1,8 +1,13 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
 
     private final int id;
+    Duration duration;
+    LocalDateTime startTime;
     private String title;
     private String description;
     private Status status;
@@ -12,6 +17,22 @@ public class Task {
         this.title = title;
         this.description = description;
         this.status = status;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public Status getStatus() {
@@ -40,6 +61,13 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime == null || duration == null) {
+            return null; // или можно выбросить исключение, если данные обязательны
+        }
+        return startTime.plus(duration);
     }
 
     @Override
