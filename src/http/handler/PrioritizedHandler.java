@@ -6,7 +6,6 @@ import manager.TaskManager;
 import model.Task;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PrioritizedHandler extends BaseHttpHandler {
@@ -22,11 +21,8 @@ public class PrioritizedHandler extends BaseHttpHandler {
     public void handle(HttpExchange h) throws IOException {
         try {
             if (h.getRequestMethod().equals("GET") && h.getRequestURI().getPath().equals("/prioritized")) {
-                // Пока возвращаем все задачи как есть (можно расширить логикой сортировки)
-                List<Task> prioritized = new ArrayList<>();
-                prioritized.addAll(manager.getAllTasks());
-                prioritized.addAll(manager.getAllSubtasks());
-                prioritized.addAll(manager.getAllEpics());
+                // Используем метод менеджера для получения отсортированных задач
+                List<Task> prioritized = manager.getPrioritizedTasks();
                 String json = gson.toJson(prioritized);
                 sendText(h, json);
             } else {

@@ -42,19 +42,28 @@ public class SubtaskHandler extends BaseHttpHandler {
             } else if (method.equals("POST")) {
                 String body = new String(h.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
                 Subtask subtask = gson.fromJson(body, Subtask.class);
-                if (subtask.getId() == 0 || manager.getSubtaskById(subtask.getId()) == null) {
-                    Subtask newSubtask = manager.createSubtask(
-                            subtask.getTitle(),
-                            subtask.getDescription(),
-                            subtask.getStatus(),
-                            subtask.getEpicId()
-                    );
-                    String json = gson.toJson(newSubtask);
-                    sendText(h, json);
-                } else {
-                    manager.updateTask(subtask);
-                    h.sendResponseHeaders(201, -1);
-                    h.close();
+
+                try {
+                    if (subtask.getId() == 0 || manager.getSubtaskById(subtask.getId()) == null) {
+                        Subtask newSubtask = manager.createSubtask(
+                                subtask.getTitle(),
+                                subtask.getDescription(),
+                                subtask.getStatus(),
+                                subtask.getEpicId()
+                        );
+                        String json = gson.toJson(newSubtask);
+                        sendText(h, json);
+                    } else {
+                        manager.updateTask(subtask);
+                        h.sendResponseHeaders(201, -1);
+                        h.close();
+                    }
+                } catch (IllegalArgumentException e) {
+                    if (e.getMessage() != null && e.getMessage().contains("пересекается")) {
+                        sendHasOverlaps(h);
+                    } else {
+                        throw e;
+                    }
                 }
             } else if (method.equals("DELETE")) {
                 if (path.equals("/subtasks")) {
@@ -75,6 +84,8 @@ public class SubtaskHandler extends BaseHttpHandler {
                 h.sendResponseHeaders(405, -1);
                 h.close();
             }
+        } catch (IllegalArgumentException e) {
+            sendInternalServerError(h);
         } catch (Exception e) {
             e.printStackTrace();
             sendInternalServerError(h);
