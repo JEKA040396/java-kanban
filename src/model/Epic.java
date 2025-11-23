@@ -7,12 +7,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
-
     private final List<Subtask> subtasks;
     private final List<Integer> subtaskIds;
-    Duration duration;
-    LocalDateTime startTime;
-    LocalDateTime endTime;
 
     public Epic(int id, String title, String description, Status status) {
         super(id, title, description, status);
@@ -20,38 +16,22 @@ public class Epic extends Task {
         this.subtaskIds = new ArrayList<>();
     }
 
-    @Override
-    public Duration getDuration() {
-        return duration;
-    }
-
-    @Override
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    @Override
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
     public void updateTimeFields() {
         if (subtasks.isEmpty()) {
-            duration = Duration.ZERO;
-            startTime = null;
-            endTime = null;
+            setDuration(Duration.ZERO);
+            setStartTime(null);
             return;
         }
 
-        duration = Duration.ZERO;
-        startTime = subtasks.stream()
+        Duration totalDuration = Duration.ZERO;
+        LocalDateTime earliestStart = subtasks.stream()
                 .map(Subtask::getStartTime)
                 .filter(Objects::nonNull)
                 .min(LocalDateTime::compareTo)
                 .orElse(null);
 
-        endTime = subtasks.stream()
-                .map(subtask -> subtask.getEndTime())
+        LocalDateTime latestEnd = subtasks.stream()
+                .map(Subtask::getEndTime)
                 .filter(Objects::nonNull)
                 .max(LocalDateTime::compareTo)
                 .orElse(null);
@@ -59,11 +39,15 @@ public class Epic extends Task {
         for (Subtask subtask : subtasks) {
             Duration subDuration = subtask.getDuration();
             if (subDuration != null) {
-                duration = duration.plus(subDuration);
+                totalDuration = totalDuration.plus(subDuration);
             }
         }
+
+        setDuration(totalDuration);
+        setStartTime(earliestStart);
     }
 
+    // остальные методы остаются без изменений...
     public List<Integer> getSubtaskIds() {
         return subtaskIds;
     }
@@ -90,7 +74,6 @@ public class Epic extends Task {
         removeSubtaskId(subtask.getId());
     }
 
-    // Метод для обновления статуса эпика в зависимости от статусов подзадач
     public void updateStatus() {
         if (subtasks.isEmpty()) {
             setStatus(Status.NEW);
